@@ -3,6 +3,10 @@ SILVERSTRIPE-PHPMAILER
 
 # CHANGELOG
 
+# 0.9.1 (2017-06-20)
+
+Minor const tweaks and corrections
+
 ### 0.9.0 (2017-06-20)
 
 Initial commit containing the following files (based on the phpmailer 5.2.23):

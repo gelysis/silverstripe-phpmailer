@@ -35,35 +35,35 @@ class SmtpMailer extends Mailer
      */
     protected function instanciate()
     {
-        $this->sendDelay = defined('SMTPMAILER_SEND_DELAY') ? SMTPMAILER_SEND_DELAY : 0;
+        $this->sendDelay = defined('SMTP_SEND_DELAY') ? SMTP_SEND_DELAY : 0;
 
         if (is_null($this->mailer)) {
             $this->mailer = new PHPMailer(true);
             $this->mailer->IsSMTP();
-            $this->mailer->CharSet = defined('SMTPMAILER_CHARSET_ENCODING')
-                ? SMTPMAILER_CHARSET_ENCODING : "utf-8";
-            $this->mailer->Host = defined('SMTPMAILER_SMTP_SERVER_ADDRESS')
-                ? SMTPMAILER_SMTP_SERVER_ADDRESS : "localhost";
-            $this->mailer->Port = defined('SMTPMAILER_SMTP_SERVER_PORT')
-                ? SMTPMAILER_SMTP_SERVER_PORT : 25;
-            $this->mailer->SMTPSecure = defined('SMTPMAILER_USE_SECURE_CONNECTION')
-                ? strtolower(SMTPMAILER_USE_SECURE_CONNECTION) : '';
-            $this->mailer->SMTPAuth = defined('SMTPMAILER_DO_AUTHENTICATE')
-                ? SMTPMAILER_DO_AUTHENTICATE : false;
+            $this->mailer->CharSet = defined('SMTP_CHARSET_ENCODING')
+                ? SMTP_CHARSET_ENCODING : "utf-8";
+            $this->mailer->Host = defined('SMTP_SMTP_SERVER_ADDRESS')
+                ? SMTP_SMTP_SERVER_ADDRESS : "localhost";
+            $this->mailer->Port = defined('SMTP_SMTP_SERVER_PORT')
+                ? SMTP_SMTP_SERVER_PORT : 25;
+            $this->mailer->SMTPSecure = defined('SMTP_USE_SECURE_CONNECTION')
+                ? strtolower(SMTP_USE_SECURE_CONNECTION) : '';
+            $this->mailer->SMTPAuth = defined('SMTP_DO_AUTHENTICATE')
+                ? SMTP_DO_AUTHENTICATE : false;
 
             if ($this->mailer->SMTPAuth) {
-                $this->mailer->Username = defined('SMTPMAILER_USERNAME')
-                    ? SMTPMAILER_USERNAME : "username";
-                $this->mailer->Password = defined('SMTPMAILER_PASSWORD')
-                    ? SMTPMAILER_PASSWORD : "password";
+                $this->mailer->Username = defined('SMTP_USERNAME')
+                    ? SMTP_USERNAME : "username";
+                $this->mailer->Password = defined('SMTP_PASSWORD')
+                    ? SMTP_PASSWORD : "password";
             }
 
-            $this->mailer->SMTPDebug = defined('SMTPMAILER_DEBUG_MESSAGING_LEVEL')
-                ? SMTPMAILER_DEBUG_MESSAGING_LEVEL : 0;
-            $this->mailer->SetLanguage(defined('SMTPMAILER_LANGUAGE_OF_MESSAGES')
-                ? SMTPMAILER_LANGUAGE_OF_MESSAGES : 'en');
-            $this->mailer->ErrorLevel = defined('SMTPMAILER_SMTP_ERROR_LEVEL')
-                ? SMTPMAILER_SMTP_ERROR_LEVEL : E_USER_ERROR;
+            $this->mailer->SMTPDebug = defined('SMTP_DEBUG_MESSAGING_LEVEL')
+                ? SMTP_DEBUG_MESSAGING_LEVEL : 0;
+            $this->mailer->SetLanguage(defined('SMTP_LANGUAGE_OF_MESSAGES')
+                ? SMTP_LANGUAGE_OF_MESSAGES : 'en');
+            $this->mailer->ErrorLevel = defined('SMTP_SMTP_ERROR_LEVEL')
+                ? SMTP_SMTP_ERROR_LEVEL : E_USER_ERROR;
         }
     }
 

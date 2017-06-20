@@ -38,7 +38,7 @@ Use cases:
 Please contact the author.
 
 # RELEASE INFORMATION
-SilverStripe-Phpmailer 0.9.0
+SilverStripe-Phpmailer 0.9.1, 
 2017-06-20
 
 # UPDATES
