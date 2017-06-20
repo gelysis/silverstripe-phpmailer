@@ -3,6 +3,11 @@ SILVERSTRIPE-PHPMAILER
 
 # CHANGELOG
 
+# 0.9.2 (2017-06-21)
+
+* Changed inclusion strategy
+* Minor const tweaks
+
 # 0.9.1 (2017-06-20)
 
 Minor const tweaks and corrections

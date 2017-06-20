@@ -40,14 +40,9 @@ class SmtpMailer extends Mailer
         if (is_null($this->mailer)) {
             $this->mailer = new PHPMailer(true);
             $this->mailer->IsSMTP();
-            $this->mailer->CharSet = defined('SMTP_CHARSET_ENCODING')
-                ? SMTP_CHARSET_ENCODING : "utf-8";
-            $this->mailer->Host = defined('SMTP_SMTP_SERVER_ADDRESS')
-                ? SMTP_SMTP_SERVER_ADDRESS : "localhost";
-            $this->mailer->Port = defined('SMTP_SMTP_SERVER_PORT')
-                ? SMTP_SMTP_SERVER_PORT : 25;
-            $this->mailer->SMTPSecure = defined('SMTP_USE_SECURE_CONNECTION')
-                ? strtolower(SMTP_USE_SECURE_CONNECTION) : '';
+
+            $this->mailer->Host = defined('SMTP_SERVER_ADDRESS')
+                ? SMTP_SERVER_ADDRESS : "localhost";
             $this->mailer->SMTPAuth = defined('SMTP_DO_AUTHENTICATE')
                 ? SMTP_DO_AUTHENTICATE : false;
 
@@ -58,12 +53,18 @@ class SmtpMailer extends Mailer
                     ? SMTP_PASSWORD : "password";
             }
 
+            $this->mailer->Port = defined('SMTP_SERVER_PORT')
+                ? SMTP_SERVER_PORT : 25;
+            $this->mailer->SMTPSecure = defined('SMTP_USE_SECURE_CONNECTION')
+                ? strtolower(SMTP_USE_SECURE_CONNECTION) : '';
+            $this->mailer->CharSet = defined('SMTP_CHARSET_ENCODING')
+                ? SMTP_CHARSET_ENCODING : "utf-8";
             $this->mailer->SMTPDebug = defined('SMTP_DEBUG_MESSAGING_LEVEL')
                 ? SMTP_DEBUG_MESSAGING_LEVEL : 0;
             $this->mailer->SetLanguage(defined('SMTP_LANGUAGE_OF_MESSAGES')
                 ? SMTP_LANGUAGE_OF_MESSAGES : 'en');
-            $this->mailer->ErrorLevel = defined('SMTP_SMTP_ERROR_LEVEL')
-                ? SMTP_SMTP_ERROR_LEVEL : E_USER_ERROR;
+            $this->mailer->ErrorLevel = defined('SMTP_ERROR_LEVEL')
+                ? SMTP_ERROR_LEVEL : E_USER_ERROR;
         }
     }
 

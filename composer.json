@@ -1,6 +1,6 @@
 {
 	"name" : "geolysis/silverstripe-phpmailer",
-	"description" : "PHPMailer implementation for building a custom smtp mailer for SilverStripe.",
+	"description" : "PHPMailer implementation for SilverStripe allowing custom smtp.",
 	"type" : "silverstripe-module",
 	"license" : "BSD-3-Clause",
 	"keywords" : [
@@ -23,8 +23,8 @@
 	},
 	"extra" : {
 		"branch-alias" : {
-			"dev-master" : "0.9.1-dev",
-			"dev-develop" : "0.9.1-dev"
+			"dev-master" : "0.9.2-dev",
+			"dev-develop" : "0.9.2-dev"
 		}
 	},
 	"prefer-stable" : true,
