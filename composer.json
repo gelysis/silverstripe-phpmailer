@@ -4,7 +4,6 @@
 	"type" : "silverstripe-module",
 	"license" : "BSD-3-Clause",
 	"keywords" : [
-		"framework",
 		"silverstripe",
 		"phpmailer"
 	],
@@ -23,8 +22,8 @@
 	},
 	"extra" : {
 		"branch-alias" : {
-			"dev-master" : "0.9.2-dev",
-			"dev-develop" : "0.9.2-dev"
+			"dev-master" : "0.9.3-dev",
+			"dev-develop" : "0.9.3-dev"
 		}
 	},
 	"prefer-stable" : true,

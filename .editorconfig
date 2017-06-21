@@ -1,0 +1,9 @@
+# For more information see the EditorConfig documentation on http://editorconfig.org/
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = spaces
+insert_final_newline = true
+trim_trailing_whitespace = true

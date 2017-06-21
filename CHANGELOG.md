@@ -3,6 +3,10 @@ SILVERSTRIPE-PHPMAILER
 
 # CHANGELOG
 
+# 0.9.3 (2017-06-21)
+
+* Added .editorconfig
+
 # 0.9.2 (2017-06-21)
 
 * Changed inclusion strategy
