@@ -14,8 +14,8 @@ require_once(dirname(__DIR__).DIRECTORY_SEPARATOR.'phpmailer'.DIRECTORY_SEPARATO
 class SmtpMailer extends Mailer
 {
 
-    /** @var int $this->sendDelay  Throttling on some services (i.e. AWS SES) */
-    private $sendDelay = 0;
+    /** @var int $this->sendDelaySeconds  Used for throttling (useful on some services like AWS SES). */
+    private $sendDelaySeconds = 2;
     /** @var PHPMailer|null $this->mailer */
     public $mailer = null;
 
@@ -31,11 +31,11 @@ class SmtpMailer extends Mailer
 
 
     /**
-     * Instanciate SmtpMailer
+     * Instantiate SmtpMailer
      */
-    protected function instanciate()
+    protected function instantiate()
     {
-        $this->sendDelay = defined('SMTP_SEND_DELAY') ? SMTP_SEND_DELAY : 0;
+        $this->sendDelaySeconds = defined('SMTP_SEND_DELAY_SECONDS') ? SMTP_SEND_DELAY_SECONDS : $this->sendDelaySecondsSeconds;
 
         if (is_null($this->mailer)) {
             $this->mailer = new PHPMailer(true);
@@ -75,48 +75,52 @@ class SmtpMailer extends Mailer
      *  @param string $from
      *  @param string $subject
      *  @param string $plainContent
-     *  @param string|false $attachedFiles
-     *  @param string|false $customheaders
+     *  @param array $attachedFiles
+     *  @param array $customHeaders
      *  @return string[]|false $sendResponse
      * @see Mailer::sendPlain()
      */
-    function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = false, $customheaders = false)
+    public function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = array(), $customHeaders = array())
     {
-        $this->instanciate();
+        $this->instantiate();
         $this->mailer->IsHTML(false);
         $this->mailer->Body = $plainContent;
 
-        return $this->sendMailViaSmtp($to, $from, $subject, $attachedFiles, $customheaders, false);
+        return $this->sendMailViaSmtp($to, $from, $subject, $attachedFiles, $customHeaders);
     }
 
 
     /* Overwriting SilverStripe's Mailer's function */
     /**
      * {@inheritDoc}
-     *  @param unknown $to
-     *  @param unknown $from
-     *  @param unknown $subject
-     *  @param unknown $htmlContent
-     *  @param string $attachedFiles
-     *  @param string $customheaders
+     *  @param string $to
+     *  @param string $from
+     *  @param string $subject
+     *  @param string $htmlContent
+     *  @param array $attachedFiles
+     *  @param array $customHeaders
      *  @param string $plainContent
-     * @param string $inlineImages
+     * @todo Check usefulness of the current $inlineImages parameter functionality
+     * @param array $inlineImages
      *  @return string[]|false $sendResponse
      * @see Mailer::sendHtml()
      */
-    function sendHTML($to, $from, $subject, $htmlContent, $attachedFiles = false, $customheaders = false, $plainContent = false, $inlineImages = false){
-        $this->instanciate();
+    public function sendHTML($to, $from, $subject, $htmlContent, $attachedFiles = array(), $customHeaders = array(),
+        $plainContent = '', $inlineImages = array())
+    {
+        $this->instantiate();
         $this->mailer->IsHTML(true);
-        if($inlineImages){
+        if ($inlineImages) {
+            // Inline images hav to be located in the base folder
             $this->mailer->MsgHTML($htmlContent, Director::baseFolder());
-        } else {
+        }else {
             $this->mailer->Body = $htmlContent;
             if(empty($plainContent)){
                 $plainContent = trim(Convert::html2raw($htmlContent));
             }
             $this->mailer->AltBody = $plainContent;
         }
-        return $this->sendMailViaSmtp($to, $from, $subject, $attachedFiles, $customheaders, $inlineImages);
+        return $this->sendMailViaSmtp($to, $from, $subject, $attachedFiles, $customHeaders);
     }
 
 
@@ -124,44 +128,47 @@ class SmtpMailer extends Mailer
      * @param string $to
      * @param string $from
      * @param string $subject
-     * @param string $attachedFiles
-     * @param string $customheaders
-     * @param string $inlineImages
+     * @param array $attachedFiles
+     * @param array $customHeaders
      * @return string[]|false $sendResponse
      */
-    protected function sendMailViaSmtp($to, $from, $subject, $attachedFiles = false, $customheaders = false, $inlineImages = false)
+    protected function sendMailViaSmtp($to, $from, $subject, array $attachedFiles, array $customHeaders)
     {
         if ($this->mailer->SMTPDebug > 0) {
+            /** @todo Check this logic and message */
             echo "<em><strong>*** Debug mode is on</strong>, printing debug messages and not redirecting to the website:</em><br/>";
             echo "To: $to, From: $from, Subject: $subject<br>";
         }
-        $logMessage = "\n*** The sender was : $from\n*** The message was :\n{$this->mailer->AltBody}\n";
+        $logMessage = "\n".'Smtp email send.'."\n".'Sender: $from'."\n".'Message: "'.($this->mailer->AltBody).'"';
 
         try {
             $this->buildBasicMail($to, $from, $subject);
-            $customheaders['X-SMTPAPI'] = '{"category": "' . $_SERVER['HTTP_HOST'] . '"}'; // Add the current domain for services like SendGrid
-            $this->addCustomHeaders($customheaders);
             $this->attachFiles($attachedFiles);
+            // Add the current domain for services like SendGrid
+            $customHeader['X-SMTPAPI'] = '{"category": "'.$_SERVER['HTTP_HOST'].'"}';
+            $this->addCustomHeader($customHeaders);
 
-            //Due to AWS SES, sometimes we need to throttle out e-mail delivery
-            if($this->sendDelay > 0){
-                usleep($this->sendDelay * 1000);//we want milliseconds, not microseconds
+            if ($this->sendDelaySeconds > 0) {
+                $delayInMicroseconds = $this->sendDelaySeconds * 1000000;
+                usleep($delayInMicroseconds);
             }
 
             $this->mailer->Send();
 
-            if($this->mailer->SMTPDebug > 0){
+            if ($this->mailer->SMTPDebug > 0) {
+                /** @todo Check this logic and message */
                 echo "<em><strong>*** E-mail to $to has been sent.</strong></em><br />";
                 echo "<em><strong>*** The debug mode blocked the process</strong> to avoid the url redirection. So the CC e-mail is not sent.</em>";
                 die();
             }
 
             $bounceAddress = $this->getBounceEmail();
-            $bounceAddress = is_string($bounceAddress) && strlen($bounceAddress) > 0 ? $bounceAddress : $from;
-            $send = array($to, $subject, $this->mailer->Body, $customheaders, $bounceAddress);
+            $bounceAddress = (is_string($bounceAddress) && strlen($bounceAddress) > 0 ? $bounceAddress : $from);
+            $send = [$to, $subject, $this->mailer->Body, $customHeader, $bounceAddress];
 
-        }catch(Exception $exception) {
+        }catch (Exception $exception) {
             $this->handleError($exception->getMessage(), $logMessage);
+            // @todo  Follow up with Silverstripe because standard functionaly does not have a consistent return type
             $send = false;
         }
 
@@ -205,9 +212,9 @@ class SmtpMailer extends Mailer
     }
 
     /**
-     * @param mixed $headers
+     * @param array $headers
      */
-    protected function addCustomHeaders($headers)
+    protected function addCustomHeaders(array $headers)
     {
         if (!is_array($headers)) {
             $headers = array();
@@ -215,49 +222,49 @@ class SmtpMailer extends Mailer
         if (!isset($headers["X-Mailer"])) {
             $headers["X-Mailer"] = X_MAILER;
         }
-        if(!isset($headers["X-Priority"])){
+        if (!isset($headers["X-Priority"])) {
             $headers["X-Priority"] = 3;
         }
         $this->mailer->ClearCustomHeaders();
 
-        // Convert cc/bcc/ReplyTo from headers to properties
-        foreach ($headers as $header_name=>$header_value) {
-            if(in_array(strtolower($header_name), array('cc', 'bcc', 'reply-to', 'replyto'))){
-                $addresses = preg_split('/(,|;)/', $header_value);
+        foreach ($headers as $headerName=>$headerValue) {
+            if(in_array(strtolower($headerName), array('cc', 'bcc', 'reply-to', 'replyto'))){
+                $addresses = preg_split('/(,|;)/', $headerValue);
             }
-            switch (strtolower($header_name)) {
+            switch (strtolower($headerName)) {
                 case 'cc':
-                    foreach($addresses as $address){ $this->mailer->addCC($address); }
-                    break;
                 case 'bcc':
-                    foreach($addresses as $address) { $this->mailer->addBCC($address); }
+                    $addMethod = 'add'.strtoupper($headerName);
+                    foreach($addresses as $address){
+                        $this->mailer->$addMethod($address);
+                    }
                     break;
                 case 'reply-to':
+                case 'replyto':
                     foreach ($addresses as $address) {
                         $this->mailer->addReplyTo($address);
                     }
                     break;
                 default:
-                    $this->mailer->AddCustomHeader($header_name . ':' . $header_value);
+                    $this->mailer->AddCustomHeader($headerName . ':' . $headerValue);
             }
+
         }
     }
 
 
     /**
-     * @param mixed $attachedFiles
+     * @param array $attachedFiles
      */
-    protected function attachFiles($attachedFiles)
+    protected function attachFiles(array $attachedFiles)
     {
-        if (is_array($attachedFiles)) {
-            foreach ($attachedFiles as $attachedFile) {
-                if (isset($attachedFile['filename']) && is_string($attachedFile['filename'])) {
-                    $filePath = $attachedFile['filename'];
-                    if (substr($filePath, 0, strlen(Director::baseFolder())) !== Director::baseFolder()) {
-                        $filePath = Director::baseFolder().DIRECTORY_SEPARATOR.$filePath;
-                    }
-                    $this->mailer->AddAttachment($filePath);
+        foreach ($attachedFiles as $attachedFile) {
+            if (isset($attachedFile['filename']) && is_string($attachedFile['filename'])) {
+                $filePath = $attachedFile['filename'];
+                if (substr($filePath, 0, strlen(Director::baseFolder())) !== Director::baseFolder()) {
+                    $filePath = Director::baseFolder().DIRECTORY_SEPARATOR.$filePath;
                 }
+                $this->mailer->AddAttachment($filePath);
             }
         }
     }

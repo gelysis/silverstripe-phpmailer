@@ -21,4 +21,4 @@ define('SMTP_USE_SECURE_CONNECTION', 'ssl'); // Encryption method : Set to '', '
 define('SMTP_CHARSET_ENCODING', 'utf-8'); // Encoding e.g. : 'utf-8' or 'iso-8859-1'
 define('SMTP_DEBUG_MESSAGING_LEVEL', 0); // Debug: 0 (off), 1 (errors), 2 (errors and messages), 4 (all)
 define('SMTP_LANGUAGE_OF_MESSAGES', 'de'); // Look into smtp/code/vendor/language/ for available languages
-define('SMTP_SEND_DELAY', 2000); // Throttling in milliseconds. (Can be set to 0.)
+define('SMTP_SEND_DELAY_SECONDS', 2); // Throttling in seconds. (Can be set to 0.)

@@ -3,6 +3,11 @@ SILVERSTRIPE-PHPMAILER
 
 # CHANGELOG
 
+# 0.9.4 (2017-06-23)
+
+* Cleanup: PSR-2, phpDoc, method parameters
+* Changed delay to seconds
+
 # 0.9.3 (2017-06-21)
 
 * Added .editorconfig

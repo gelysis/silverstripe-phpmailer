@@ -38,8 +38,8 @@ Use cases:
 Please contact the author.
 
 # RELEASE INFORMATION
-SilverStripe-Phpmailer 0.9.3, 
-2017-06-21
+SilverStripe-Phpmailer 0.9.4, 
+2017-06-23
 
 # UPDATES
 Please see [CHANGELOG.md].
