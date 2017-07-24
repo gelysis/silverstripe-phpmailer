@@ -35,7 +35,9 @@ class SmtpMailer extends Mailer
      */
     protected function instantiate()
     {
-        $this->sendDelaySeconds = defined('SMTP_SEND_DELAY_SECONDS') ? SMTP_SEND_DELAY_SECONDS : $this->sendDelaySecondsSeconds;
+        $this->sendDelaySeconds = defined('SMTP_SEND_DELAY_SECONDS')
+            ? SMTP_SEND_DELAY_SECONDS
+            : $this->sendDelaySecondsSeconds;
 
         if (is_null($this->mailer)) {
             $this->mailer = new PHPMailer(true);
@@ -80,7 +82,7 @@ class SmtpMailer extends Mailer
      *  @return string[]|false $sendResponse
      * @see Mailer::sendPlain()
      */
-    public function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = array(), $customHeaders = array())
+    public function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = [], $customHeaders = [])
     {
         $this->instantiate();
         $this->mailer->IsHTML(false);
@@ -105,8 +107,8 @@ class SmtpMailer extends Mailer
      *  @return string[]|false $sendResponse
      * @see Mailer::sendHtml()
      */
-    public function sendHTML($to, $from, $subject, $htmlContent, $attachedFiles = array(), $customHeaders = array(),
-        $plainContent = '', $inlineImages = array())
+    public function sendHTML($to, $from, $subject, $htmlContent, $attachedFiles = [], $customHeaders = [],
+        $plainContent = '', $inlineImages = [])
     {
         $this->instantiate();
         $this->mailer->IsHTML(true);
@@ -217,7 +219,7 @@ class SmtpMailer extends Mailer
     protected function addCustomHeaders(array $headers)
     {
         if (!is_array($headers)) {
-            $headers = array();
+            $headers = [];
         }
         if (!isset($headers["X-Mailer"])) {
             $headers["X-Mailer"] = X_MAILER;
@@ -228,7 +230,7 @@ class SmtpMailer extends Mailer
         $this->mailer->ClearCustomHeaders();
 
         foreach ($headers as $headerName=>$headerValue) {
-            if(in_array(strtolower($headerName), array('cc', 'bcc', 'reply-to', 'replyto'))){
+            if(in_array(strtolower($headerName), ['cc', 'bcc', 'reply-to', 'replyto'])){
                 $addresses = preg_split('/(,|;)/', $headerValue);
             }
             switch (strtolower($headerName)) {
