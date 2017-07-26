@@ -37,7 +37,7 @@ class SmtpMailer extends Mailer
     {
         $this->sendDelaySeconds = defined('SMTP_SEND_DELAY_SECONDS')
             ? SMTP_SEND_DELAY_SECONDS
-            : $this->sendDelaySecondsSeconds;
+            : $this->sendDelaySeconds;
 
         if (is_null($this->mailer)) {
             $this->mailer = new PHPMailer(true);
@@ -216,7 +216,7 @@ class SmtpMailer extends Mailer
     /**
      * @param array $headers
      */
-    protected function addCustomHeaders(array $headers)
+    protected function addCustomHeader(array $headers)
     {
         if (!is_array($headers)) {
             $headers = [];
