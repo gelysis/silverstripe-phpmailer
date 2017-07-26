@@ -3,6 +3,12 @@ SILVERSTRIPE-PHPMAILER
 
 # CHANGELOG
 
+# 0.9.5 (2017-07-26)
+
+* Fixed typos
+* Tweaked .editorconfig
+* Cleaned up phpDoc
+
 # 0.9.4 (2017-06-23)
 
 * Cleanup: PSR-2, phpDoc, method parameters
