@@ -3,7 +3,7 @@ SILVERSTRIPE-PHPMAILER
 
 PHPMailer for SilverStripe
 --------------------------
-Copyright ©2017, Andreas Gerhards <ag.dialogue@yahoo.co.nz>.
+Copyright ©2017, Andreas Gerhards <andreas@gelysis.net>.
 All rights reserved. / Alle Rechte vorbehalten.
 
 Based on the [SilverStripe SmtpMailer fork of Philipp Krenn](https://github.com/xeraa/silverstripe-smtp.git).
@@ -31,7 +31,7 @@ Use cases:
 * If you are using AWS and would like to utilize the SES (Simple Email Service).
 
 # INSTALLATION
-* Use packagist depndency (geolysis/silverstripe-phpmailer).
+* Use packagist dependency (gelysis/silverstripe-phpmailer).
 * Configure the module using _config.php.model. Without any configuration the fallback is localhost without authentication.
 
 # QUESTIONS AND FEEDBACK

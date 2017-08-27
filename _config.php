@@ -1,9 +1,9 @@
 <?php
 /**
  * SilverStripe-Phpmailer
- * @category smtp
- * @author Andreas Gerhards <ag.dialogue@yahoo.co.nz>
- * @copyright ©2017, Andreas Gerhards
+ * @package smtp
+ * @author gelysis <andreas@gelysis.net>
+ * @copyright ©2017 Andreas Gerhards - All rights reserved
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause - Please check LICENSE.md for more information
  */
 

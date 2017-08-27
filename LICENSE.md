@@ -1,8 +1,8 @@
 SILVERSTRIPE-PHPMAILER
 ======================
 
-Copyright ©2017, Andreas Gerhards <ag.dialogue@yahoo.co.nz>.  
---------------------------------------------------------------
+Copyright ©2017, Andreas Gerhards <andreas@gelysis.net>
+-------------------------------------------------------
 All rights reserved.
 --------------------
 
@@ -29,8 +29,8 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-Copyright ©2017, Andreas Gerhards <ag.dialogue@yahoo.co.nz>.  
---------------------------------------------------------------
+Copyright ©2017, Andreas Gerhards <andreas@gelysis.net>
+-------------------------------------------------------
 Alle Rechte vorbehalten.
 ------------------------
 
