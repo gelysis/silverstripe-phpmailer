@@ -7,9 +7,11 @@
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause - Please check LICENSE.md for more information
  */
 
+use SilverStripe\Core\Injector\Injector;
+
 $localConfigFile = './local.php';
 if (file_exists($localConfigFile)) {
     require_once $localConfigFile;
 }
 
-Email::set_mailer(new SmtpMailer());
+Injector::inst()->registerService(new SmtpMailer(), 'Mailer');

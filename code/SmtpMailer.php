@@ -10,6 +10,10 @@
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
+use SilverStripe\Control\Director;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Control\Email\Mailer;
+use SilverStripe\Core\Convert;
 
 
 $phpMailerPath = dirname(__DIR__).DIRECTORY_SEPARATOR.'phpmailer'.DIRECTORY_SEPARATOR;
@@ -34,6 +38,16 @@ class SmtpMailer extends Mailer
     {
         parent::__construct();
         $this->mailer = $mailer;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param Email $email
+     * @return bool
+     */
+    public function send($email)
+    {
+        return $this->sendHTML($email->getTo(), $email->getFrom(), $email->getSubject(), $email->getBody());
     }
 
     /**
