@@ -7,8 +7,15 @@
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause - Please check LICENSE.md for more information
  */
 
-require_once(dirname(__DIR__).DIRECTORY_SEPARATOR.'phpmailer'.DIRECTORY_SEPARATOR.'class.phpmailer.php');
-require_once(dirname(__DIR__).DIRECTORY_SEPARATOR.'phpmailer'.DIRECTORY_SEPARATOR.'class.smtp.php');
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+
+
+$phpMailerPath = dirname(__DIR__).DIRECTORY_SEPARATOR.'phpmailer'.DIRECTORY_SEPARATOR;
+require_once($phpMailerPath.'Exception.php');
+require_once($phpMailerPath.'PHPMailer.php');
+require_once($phpMailerPath.'SMTP.php');
 
 
 class SmtpMailer extends Mailer
@@ -28,7 +35,6 @@ class SmtpMailer extends Mailer
         parent::__construct();
         $this->mailer = $mailer;
     }
-
 
     /**
      * Instantiate SmtpMailer
@@ -95,16 +101,16 @@ class SmtpMailer extends Mailer
     /* Overwriting SilverStripe's Mailer's function */
     /**
      * {@inheritDoc}
-     *  @param string $to
-     *  @param string $from
-     *  @param string $subject
-     *  @param string $htmlContent
-     *  @param array $attachedFiles
-     *  @param array $customHeaders
-     *  @param string $plainContent
+     * @param string $to
+     * @param string $from
+     * @param string $subject
+     * @param string $htmlContent
+     * @param array $attachedFiles
+     * @param array $customHeaders
+     * @param string $plainContent
      * @todo Check usefulness of the current $inlineImages parameter functionality
      * @param array $inlineImages
-     *  @return string[]|false $sendResponse
+     * @return string[]|false $sendResponse
      * @see Mailer::sendHtml()
      */
     public function sendHTML($to, $from, $subject, $htmlContent, $attachedFiles = [], $customHeaders = [],
