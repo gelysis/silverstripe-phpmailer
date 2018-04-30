@@ -3,6 +3,9 @@ SILVERSTRIPE-PHPMAILER
 
 # CHANGELOG
 
+# 0.9.7 (2018-02-19)
+* Updated to phpmailer version 6.0.3
+
 # 0.9.6 (2017-08-07)
 * Updated to phpmailer version 5.2.24
 * Added phpmailer VERSION
